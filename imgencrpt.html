@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Encryption & Decryption</title>
+    <link rel="stylesheet" href="imgencrpt.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .file-input-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #333;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        input[type="file"] {
+            flex-grow: 1;
+            background: none;
+            border: none;
+            color: #fff;
+        }
+        .clear-btn {
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        input[type="password"] {
+            background: #444;
+            color: #fff;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            padding-right: 40px;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            color: white;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        button:hover {
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            transform: scale(1.05);
+        }
+        canvas, img {
+            max-width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        }
+        #decryptedFooter {
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Image Encryption & Decryption</h1>
+        <p>Supported formats: JPG, PNG</p>
+        <div class="file-input-container">
+            <input type="file" id="imageInput" accept="image/png, image/jpeg" onchange="clearDecryptionInput();">
+            <button class="clear-btn" onclick="clearImage('imageInput')">✖</button>
+        </div>
+        <div class="password-container">
+            <input type="password" id="passwordInput" placeholder="Enter Password">
+            <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+        </div>
+        <button onclick="encryptImage()">Encrypt & Download</button>
+        <button onclick="decryptImage()">Decrypt</button>
+        <div class="file-input-container">
+            <input type="file" id="loadEncryptedFile" accept=".txt" onchange="loadEncryptedFile(event); clearEncryptionInput();">
+            <button class="clear-btn" onclick="clearImage('loadEncryptedFile')">✖</button>
+        </div>
+        <canvas id="canvas"></canvas>
+        <div id="decryptedFooter">
+            <h3>Decrypted Image:</h3>
+            <img id="decryptedImage" style="display:none;"/>
+        </div>
+    </div>
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('passwordInput');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+            } else {
+                passwordInput.type = 'password';
+            }
+        }
+    </script>
+</body>
+</html>
